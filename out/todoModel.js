@@ -11,6 +11,20 @@ var app = app || {};
 
   Parse.initialize("XixwxAUzP89PWo1jArax1fLmHpGX0uwXnPBetaqK", "4DTlTF4UsOJCp5gAWUh9OmTo4GyaxBexqtWZpnhx");
 
+  function fetchTodos(model) {
+    var query = new Parse.Query(ParseTodoItem);
+    query.find({
+      success: function success(results) {
+        model.todos = results;
+        model.inform();
+        setTimeout(fetchTodos, 3000, model);
+      },
+      error: function error(_error) {
+        setTimeout(fetchTodos, 3000, model);
+      }
+    });
+  }
+
   var ParseTodoItem = Parse.Object.extend("ParseTodoItem", {
     // Instance methods
   }, {
@@ -29,14 +43,7 @@ var app = app || {};
     this.key = key;
     this.todos = [];
     this.onChanges = [];
-    var todoModel = this;
-    var query = new Parse.Query(ParseTodoItem);
-    query.find({
-      success: function success(results) {
-        todoModel.todos = results;
-        todoModel.inform();
-      }
-    });
+    fetchTodos(this);
   };
 
   app.TodoModel.prototype.subscribe = function (onChange) {
@@ -44,7 +51,6 @@ var app = app || {};
   };
 
   app.TodoModel.prototype.inform = function () {
-    //Utils.store(this.key, this.todos);
     this.onChanges.forEach(function (cb) {
       cb();
     });
@@ -59,7 +65,7 @@ var app = app || {};
         todoModel.todos = todoModel.todos.concat(savedItem);
         todoModel.inform();
       },
-      error: function error(savedItem, _error) {}
+      error: function error(savedItem, _error2) {}
     });
   };
 
@@ -73,7 +79,7 @@ var app = app || {};
       success: function success(list) {
         todoModel.inform();
       },
-      error: function error(_error2) {}
+      error: function error(_error3) {}
     });
   };
 
@@ -85,7 +91,7 @@ var app = app || {};
       success: function success(savedItem) {
         todoModel.inform();
       },
-      error: function error(savedItem, _error3) {}
+      error: function error(savedItem, _error4) {}
     });
   };
 
@@ -96,7 +102,7 @@ var app = app || {};
     this.inform();
     todo.destroy({
       success: function success(myObject) {},
-      error: function error(myObject, _error4) {}
+      error: function error(myObject, _error5) {}
     });
   };
 

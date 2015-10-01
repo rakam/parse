@@ -9,6 +9,20 @@ var app = app || {};
 
   Parse.initialize("XixwxAUzP89PWo1jArax1fLmHpGX0uwXnPBetaqK", "4DTlTF4UsOJCp5gAWUh9OmTo4GyaxBexqtWZpnhx");
 
+  function fetchTodos(model) {
+    var query = new Parse.Query(ParseTodoItem);
+    query.find({
+      success: function(results) {
+        model.todos = results;
+        model.inform();
+        setTimeout(fetchTodos, 3000, model);
+      },
+      error: function(error) {
+        setTimeout(fetchTodos, 3000, model);
+      }
+    });
+  }
+
   var ParseTodoItem = Parse.Object.extend("ParseTodoItem", {
     // Instance methods
   }, {
@@ -27,14 +41,7 @@ var app = app || {};
     this.key = key;
     this.todos = [];
     this.onChanges = [];
-    var todoModel = this;
-    var query = new Parse.Query(ParseTodoItem);
-    query.find({
-      success: function(results) {
-        todoModel.todos = results;
-        todoModel.inform();
-      }
-    });
+    fetchTodos(this);
   };
 
   app.TodoModel.prototype.subscribe = function(onChange) {
@@ -42,7 +49,6 @@ var app = app || {};
   };
 
   app.TodoModel.prototype.inform = function() {
-    //Utils.store(this.key, this.todos);
     this.onChanges.forEach(function(cb) {
       cb();
     });
