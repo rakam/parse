@@ -2,9 +2,11 @@
 /*jshint white:false */
 /*jshint trailing:false */
 /*jshint newcap:false */
+"use strict";
+
 var app = app || {};
 
-(function() {
+(function () {
   'use strict';
 
   Parse.initialize("XixwxAUzP89PWo1jArax1fLmHpGX0uwXnPBetaqK", "4DTlTF4UsOJCp5gAWUh9OmTo4GyaxBexqtWZpnhx");
@@ -13,7 +15,7 @@ var app = app || {};
     // Instance methods
   }, {
     // Class methods
-    new: function(title) {
+    "new": function _new(title) {
       var parseTodoItem = new ParseTodoItem();
       parseTodoItem.set('title', title);
       parseTodoItem.set('completed', false);
@@ -23,90 +25,90 @@ var app = app || {};
 
   var Utils = app.Utils;
 
-  app.TodoModel = function(key) {
+  app.TodoModel = function (key) {
     this.key = key;
     this.todos = [];
     this.onChanges = [];
     var todoModel = this;
     var query = new Parse.Query(ParseTodoItem);
     query.find({
-      success: function(results) {
+      success: function success(results) {
         todoModel.todos = results;
         todoModel.inform();
       }
     });
   };
 
-  app.TodoModel.prototype.subscribe = function(onChange) {
+  app.TodoModel.prototype.subscribe = function (onChange) {
     this.onChanges.push(onChange);
   };
 
-  app.TodoModel.prototype.inform = function() {
+  app.TodoModel.prototype.inform = function () {
     //Utils.store(this.key, this.todos);
-    this.onChanges.forEach(function(cb) {
+    this.onChanges.forEach(function (cb) {
       cb();
     });
   };
 
-  app.TodoModel.prototype.addTodo = function(title) {
+  app.TodoModel.prototype.addTodo = function (title) {
     var todoModel = this;
-    var item = new ParseTodoItem.new(title);
+    var item = new ParseTodoItem["new"](title);
     this.inform();
     item.save(null, {
-      success: function(savedItem) {
+      success: function success(savedItem) {
         todoModel.todos = todoModel.todos.concat(savedItem);
         todoModel.inform();
       },
-      error: function(savedItem, error) {}
+      error: function error(savedItem, _error) {}
     });
   };
 
-  app.TodoModel.prototype.toggleAll = function(checked) {
+  app.TodoModel.prototype.toggleAll = function (checked) {
     var todoModel = this;
-    this.todos.map(function(todo) {
+    this.todos.map(function (todo) {
       todo.set('completed', checked);
     });
     this.inform();
     Parse.Object.saveAll(this.todos, {
-      success: function(list) {
+      success: function success(list) {
         todoModel.inform();
       },
-      error: function(error) {},
+      error: function error(_error2) {}
     });
   };
 
-  app.TodoModel.prototype.toggle = function(todoToToggle) {
+  app.TodoModel.prototype.toggle = function (todoToToggle) {
     var todoModel = this;
     todoToToggle.set('completed', !todoToToggle.get('completed'));
     this.inform();
     todoToToggle.save(null, {
-      success: function(savedItem) {
+      success: function success(savedItem) {
         todoModel.inform();
       },
-      error: function(savedItem, error) {}
+      error: function error(savedItem, _error3) {}
     });
   };
 
-  app.TodoModel.prototype.destroy = function(todo) {
-    this.todos = this.todos.filter(function(obj) {
+  app.TodoModel.prototype.destroy = function (todo) {
+    this.todos = this.todos.filter(function (obj) {
       return obj !== todo;
     });
     this.inform();
     todo.destroy({
-      success: function(myObject) {},
-      error: function(myObject, error) {}
+      success: function success(myObject) {},
+      error: function error(myObject, _error4) {}
     });
   };
 
-  app.TodoModel.prototype.save = function(todoToSave, text) {
+  app.TodoModel.prototype.save = function (todoToSave, text) {
     todoToSave.set('title', text);
     todoToSave.save(null);
     this.inform();
   };
 
-  app.TodoModel.prototype.clearCompleted = function() {
+  app.TodoModel.prototype.clearCompleted = function () {
     var deletedItems = [];
-    this.todos = this.todos.filter(function(todo) {
+    this.todos = this.todos.filter(function (todo) {
       if (!todo.get('completed')) {
         return true;
       } else {
@@ -117,5 +119,4 @@ var app = app || {};
     Parse.Object.destroyAll(deletedItems);
     this.inform();
   };
-
 })();

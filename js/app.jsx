@@ -63,7 +63,7 @@ var app = app || {};
 		},
 
 		edit: function (todo) {
-			this.setState({editing: todo.id});
+			this.setState({editing: todo.objectId});
 		},
 
 		save: function (todoToSave, text) {
@@ -87,9 +87,9 @@ var app = app || {};
 			var shownTodos = todos.filter(function (todo) {
 				switch (this.state.nowShowing) {
 				case app.ACTIVE_TODOS:
-					return !todo.completed;
+					return !todo.get('completed');
 				case app.COMPLETED_TODOS:
-					return todo.completed;
+					return todo.get('completed');
 				default:
 					return true;
 				}
@@ -98,12 +98,12 @@ var app = app || {};
 			var todoItems = shownTodos.map(function (todo) {
 				return (
 					<TodoItem
-						key={todo.id}
+						key={todo.objectId}
 						todo={todo}
 						onToggle={this.toggle.bind(this, todo)}
 						onDestroy={this.destroy.bind(this, todo)}
 						onEdit={this.edit.bind(this, todo)}
-						editing={this.state.editing === todo.id}
+						editing={this.state.editing === todo.objectId}
 						onSave={this.save.bind(this, todo)}
 						onCancel={this.cancel}
 					/>
@@ -111,7 +111,7 @@ var app = app || {};
 			}, this);
 
 			var activeTodoCount = todos.reduce(function (accum, todo) {
-				return todo.completed ? accum : accum + 1;
+				return todo.get('completed') ? accum : accum + 1;
 			}, 0);
 
 			var completedCount = todos.length - activeTodoCount;

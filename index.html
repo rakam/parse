@@ -5,6 +5,7 @@
 		<title>React • TodoMVC</title>
 		<link rel="stylesheet" href="node_modules/todomvc-common/base.css">
 		<link rel="stylesheet" href="node_modules/todomvc-app-css/index.css">
+  	<script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.6.4.js"></script>
 	</head>
 	<body>
 		<section class="todoapp"></section>
@@ -14,13 +15,13 @@
 		<script src="node_modules/react/dist/JSXTransformer.js"></script>
 		<script src="node_modules/director/build/director.js"></script>
 
-		<script src="js/utils.js"></script>
-		<script src="js/todoModel.js"></script>
+		<script src="out/utils.js"></script>
+		<script src="out/todoModel.js"></script>
 		<!-- jsx is an optional syntactic sugar that transforms methods in React's
 		`render` into an HTML-looking format. Since the two models above are
 		unrelated to React, we didn't need those transforms. -->
-		<script type="text/jsx" src="js/todoItem.jsx"></script>
-		<script type="text/jsx" src="js/footer.jsx"></script>
-		<script type="text/jsx" src="js/app.jsx"></script>
+		<script type="text/javascript" src="out/todoItem.js"></script>
+		<script type="text/javascript" src="out/footer.js"></script>
+		<script type="text/javascript" src="out/app.js"></script>
 	</body>
 </html>
