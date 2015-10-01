@@ -154,7 +154,7 @@ var app = app || {};
 					React.createElement(
 						'h1',
 						null,
-						'todos'
+						'parse todos'
 					),
 					React.createElement('input', {
 						ref: 'newField',

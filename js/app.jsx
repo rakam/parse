@@ -145,7 +145,7 @@ var app = app || {};
 			return (
 				<div>
 					<header className="header">
-						<h1>todos</h1>
+						<h1>parse todos</h1>
 						<input
 							ref="newField"
 							className="new-todo"
